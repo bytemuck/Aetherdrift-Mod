@@ -1,8 +1,6 @@
 package org.teamvikcee.aetherdrift
 
 import org.teamvikcee.aetherdrift.block.ModBlocks
-import net.minecraft.client.Minecraft
-import net.neoforged.api.distmarker.Dist
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
 import net.neoforged.fml.common.Mod
@@ -16,54 +14,37 @@ import org.teamvikcee.aetherdrift.item.ModItems
 import thedarkcolour.kotlinforforge.neoforge.forge.MOD_BUS
 import thedarkcolour.kotlinforforge.neoforge.forge.runForDist
 
-/**
- * Main mod class.
- *
- * An example for blocks is in the `blocks` package of this mod.
- */
 @Mod(Aetherdrift.ID)
 @EventBusSubscriber(modid = Aetherdrift.ID)
 object Aetherdrift {
     const val ID = "aetherdrift"
 
-    // the logger for our mod
     val LOGGER: Logger = LogManager.getLogger(ID)
 
     init {
-        LOGGER.log(Level.INFO, "Hello world!")
-
-        // Register the KDeferredRegister to the mod-specific event bus
         ModBlocks.REGISTRY.register(MOD_BUS)
         ModItems.REGISTRY.register(MOD_BUS)
 
-        val obj = runForDist(clientTarget = {
-            MOD_BUS.addListener(::onClientSetup)
-        }, serverTarget = {
-            MOD_BUS.addListener(::onServerSetup)
-            "test"
-        })
-
-        println(obj)
+        runForDist(
+            clientTarget = {
+                MOD_BUS.addListener(::onClientSetup)
+            },
+            serverTarget = {
+                MOD_BUS.addListener(::onServerSetup)
+            }
+        )
     }
 
-    /**
-     * This is used for initializing client specific
-     * things such as renderers and keymaps
-     * Fired on the mod specific event bus.
-     */
     private fun onClientSetup(event: FMLClientSetupEvent) {
-        LOGGER.log(Level.INFO, "Initializing client...")
+        LOGGER.log(Level.INFO, "onClientSetup()")
     }
 
-    /**
-     * Fired on the global Forge bus.
-     */
     private fun onServerSetup(event: FMLDedicatedServerSetupEvent) {
-        LOGGER.log(Level.INFO, "Server starting...")
+        LOGGER.log(Level.INFO, "onServerSetup()")
     }
 
     @SubscribeEvent
     fun onCommonSetup(event: FMLCommonSetupEvent) {
-        LOGGER.log(Level.INFO, "Hello! This is working!")
+        LOGGER.log(Level.INFO, "onCommonSetup()")
     }
 }
